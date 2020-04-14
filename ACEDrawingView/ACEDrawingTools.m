@@ -600,19 +600,21 @@ CGPoint midPoint(CGPoint p1, CGPoint p2)
     double dist = sqrt(dx*dx + dy*dy);
     
     
-    CGPoint center = midPoint(self.firstPoint, self.lastPoint);
-    CGFloat diameter = dist / 2;
-    CGFloat sidesNumber = 3;
-        
-    // Now add the hexagon to the current path
-    CGContextMoveToPoint(context, center.x, center.y + diameter);
-    for(int i = 1; i < sidesNumber+1; ++i)
-    {
-        CGFloat x = diameter * sinf(i * 2.0 * M_PI / sidesNumber);
-        CGFloat y = diameter * cosf(i * 2.0 * M_PI / sidesNumber);
-        CGContextAddLineToPoint(context, center.x + x, center.y + y);
-    }
-    
+    CGContextMoveToPoint(context, self.firstPoint.x, self.firstPoint.y);
+    CGContextAddLineToPoint(context, self.lastPoint.x + (dist / 2) , self.lastPoint.y);
+    CGContextAddLineToPoint(context, self.lastPoint.x - (dist / 2) , self.lastPoint.y);
+    CGContextAddLineToPoint(context, self.firstPoint.x, self.firstPoint.y);
+//    CGRect rectToFill = CGRectMake(self.firstPoint.x, self.firstPoint.y, self.lastPoint.x - self.firstPoint.x, self.lastPoint.y - self.firstPoint.y);
+//    if (self.fill) {
+//        CGContextSetFillColorWithColor(context, self.lineColor.CGColor);
+//        CGContextFillRect(UIGraphicsGetCurrentContext(), rectToFill);
+//
+//    } else {
+//        CGContextSetStrokeColorWithColor(context, self.lineColor.CGColor);
+//        CGContextSetLineWidth(context, self.lineWidth);
+//        CGContextStrokeRect(UIGraphicsGetCurrentContext(), rectToFill);
+//    }
+//
     
     if (self.fill) {
         CGContextDrawPath(context, kCGPathFillStroke);
