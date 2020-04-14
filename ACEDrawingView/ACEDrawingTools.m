@@ -688,16 +688,38 @@ CGPoint midPoint(CGPoint p1, CGPoint p2)
     CGPoint center = midPoint(self.firstPoint, self.lastPoint);
     CGFloat diameter = dist / 2;
     CGFloat sidesNumber = 5;
-        
+    
     // Now add the hexagon to the current path
-    CGContextMoveToPoint(context, center.x, center.y + diameter);
+    CGContextMoveToPoint(context, center.x, center.y - diameter);
+    
     for(int i = 1; i < sidesNumber+1; ++i)
     {
         CGFloat x = diameter * sinf(i * 2.0 * M_PI / sidesNumber);
         CGFloat y = diameter * cosf(i * 2.0 * M_PI / sidesNumber);
-        CGContextAddLineToPoint(context, center.x + x, center.y + y);
+        
+        if (i == 5) {
+            CGPoint point = CGPointMake(center.x + x, center.y + y);
+            double dx1 = (center.x - point.x);
+            double dy1 = (center.y - point.y);
+            double dist1 = sqrt(dx1*dx1 + dy1*dy1) * 2;
+            CGContextAddLineToPoint(context, point.x, point.y - dist1);
+        }
+        else if (i == 1 || i == 4) {
+            CGPoint point = CGPointMake(center.x + x, center.y + y);
+            CGPoint center1 = CGPointMake(point.x, center.y);
+            double dx1 = (center1.x - point.x);
+            double dy1 = (center1.y - point.y);
+            double dist1 = sqrt(dx1*dx1 + dy1*dy1) * 2;
+            CGContextAddLineToPoint(context, point.x, point.y - dist1);
+        } else {
+            CGPoint point = CGPointMake(center.x + x, center.y + y);
+            CGPoint center1 = CGPointMake(point.x, center.y);
+            double dx1 = (center1.x - point.x);
+            double dy1 = (center1.y - point.y);
+            double dist1 = sqrt(dx1*dx1 + dy1*dy1) * 2;
+            CGContextAddLineToPoint(context, point.x, point.y + dist1);
+        }
     }
-    
     
     if (self.fill) {
         CGContextDrawPath(context, kCGPathFillStroke);
